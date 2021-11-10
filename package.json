@@ -1,0 +1,16 @@
+{
+  "name": "homehelper",
+  "version": "1.0.0",
+  "description": "A Home Automation Helper Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SamLaird",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "node-fetch": "^2.6.6",
+    "npm": "^8.1.3"
+  }
+}

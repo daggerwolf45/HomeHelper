@@ -1,0 +1,5 @@
+HA naming syntax
+
+roomID_category_class_deviceID
+Example: Sam's lights
+skr_lt_sw_main
