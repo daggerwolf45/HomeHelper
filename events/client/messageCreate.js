@@ -28,6 +28,8 @@ module.exports = (Discord, client, message) => {
             if (e.message == 1){
                 console.error("NLP Failed!\n" + e);
                 return;
+            } else if (e.message != 2) {
+                console.error(e);
             }
         } 
         console.error("Unknown command: " + command);                                 //If command doesn't exist, post in console

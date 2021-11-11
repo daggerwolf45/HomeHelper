@@ -15,17 +15,33 @@ module.exports = {
     name: 'nlp',
     description: 'Natrual Language Processing Core',
     execute(message, args, client){
-        args = message.content.split(" ");
+        if (message.content.startsWith('!')){
+            args = message.content.slice(1).split(" ")
+        } else {
+            args = message.content.split(" ");
+        }
 
         //BAD! Hardcoded checks just for debugging
         if (args[0].toLowerCase() === "evaluate"){
             if (args[1].toLowerCase() == "string" || args[1].toLowerCase() == "str"){
                 message.channel.send(dcFrm(parseDevString(args[2]), true));
                 return 0;
-            } else 
+            } else if (args[1].toLowerCase() == "device"){
+                const device = parseDevString(args[2]);
+            }
                 return 1;
         }
     }
+}
+
+/**
+ * Functions:
+ * TODO: These should be moved to their own files for organization purposes
+ */
+
+
+function getDeviceInfo(device){
+
 }
 
 function parseDevString(str){
@@ -44,14 +60,19 @@ function parseDevString(str){
         room: objects.rooms.get(components[0]),
         category: objects.categories.get(components[1]),
         type: objects.types.get(components[2]),
-        device: objects.devices.get(devFid),
-        paramerters: params
+        device: {
+            data: objects.devices.get(devFid),
+            parameters: params
+        },
+        parameters: objects.categories.get(objects.categories.get(components[1]).parameters)
     }
 
     return data
 }
 
-function fillParam(device, paramets){}
+function fillParam(device, paramets){
+
+}
 
 function dcFrm(string, json){
     if (json){
@@ -75,7 +96,16 @@ function createObjmap(obj){
         coll.rooms.set(i.id, i);
     }
     for (const i of obj.categories){
+        if (i.parameters[0] != "none"){
+            let catParms = new Map();
+            for (const j of i.parameters){
+                catParms.set(j.id,j);
+            }
+
+            i.parameters = catParms;
+        }
         coll.categories.set(i.id, i);
+        console.log(coll.categories.parameters);
     }
     for (const i of obj.classes){
         coll.types.set(i.id, i);
