@@ -2,4 +2,10 @@ HA naming syntax
 
 roomID_category_class_deviceID.perameter
 Example: Sam's lights' brightness
-skr_lt_sw_main.br
+sr_lt_sw_main.br
+
+
+RegSent:
+    Symbols:
+        /       TypeSpecifier: use an article = /AR
+        -       SubType Specfier: use a noun, that is a device = /N0-DV

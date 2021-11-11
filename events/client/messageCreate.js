@@ -13,7 +13,6 @@ module.exports = (Discord, client, message) => {
     } else if (!message.content.startsWith(prefix)){                                //Else, if there is no prefix 
         return;                                                                         //Stop processing the message
     }
-
     
     const command = args.shift().toLowerCase();                                     //Make command lowercase
 
@@ -23,7 +22,8 @@ module.exports = (Discord, client, message) => {
     } catch {
         try {
             client.commands.get('nlp').execute(message, args, client);
-            console.log(`[Message]: ${message.author.username} activated NLP with :${command} ${args}`);
+            console.log(`[Message]: ${message.author.username} activated NLP with: ${command} ${args}`);
+            return;
         } catch (e){
             if (e.message == 1){
                 console.error("NLP Failed!\n" + e);
