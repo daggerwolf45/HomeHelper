@@ -1,13 +1,27 @@
 /*
     Misc Requirements
 */
-const apiKeys = require("./keys.json");
+const api = require("./keys.json");
 const fs = require('fs');
 
 /*
     Setup HomeAssistant
-*/
+*//*
+getAPI().then(res => {
+    console.log(res);
+})
 
+async function getAPI() {
+    const response = await fetch(api.ha.url, {
+        method: 'GET',
+        headers: {
+            "Authorization": `Bearer ${api.ha.token}`,
+            "Content-Type": "application/json"
+        }
+    });
+    const data = await response.json();
+    return data;
+}*/
 
 /*
     Setup Discord
@@ -30,4 +44,4 @@ for (const handler of fs.readdirSync('./handlers/').filter(file => file.endsWith
 
 
 //Connect to Dicord
-client.login(apiKeys.discordToken);
+client.login(api.discordToken);

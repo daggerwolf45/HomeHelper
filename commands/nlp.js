@@ -2,11 +2,14 @@ const fs = require('fs');
 
 const pLoc = "./phrases.json";
 const oLoc = './objects.json';
+const lLoc = './halookup.json';
 
 const phraseFile = fs.readFileSync(pLoc);
 const objFile = fs.readFileSync(oLoc);
+const halFile = fs.readFileSync(lLoc);
 const phrases = JSON.parse(phraseFile);
 const objects = JSON.parse(objFile);
+const lookup = mirrorLookup(JSON.parse(halFile));
 
 const peopleById = getDIDList(objects.people);
 
@@ -52,6 +55,8 @@ module.exports = {
                 message.channel.send(msg.join(""));
             }
                 return 1;
+        } else if (args[0].toLowerCase() == "get") {
+            const lookup = parseDevString(args[1]);
         }
     }
 }
@@ -62,9 +67,6 @@ module.exports = {
  */
 
 
-function getDeviceInfo(device){
-
-}
 
 function parseDevString(str){
     //Ref: sr_lt_sw_main.br
@@ -81,11 +83,45 @@ function parseDevString(str){
         parameter: objects.categories[components[1]].parameters[components[4]]
     }
 
+    data.device.fid = devFid;
+
     return data
 }
 
-function fillParam(device, paramets){
+function dev2HA(device, type){
+    //TODO Handle parameters
+    let newString;
+    if (type == "string" || type == 0){
 
+    } else {
+        const backHalf = [
+            device.room,
+            device.type,
+            device.sid
+        ]
+        const frontHalf = [
+            lookup.hh.categories[device.category],
+            backHalf.join(lookup.delimeters.secondary)
+        ]
+
+        newString = frontHalf.join(lookup.delimeters.primary);
+    }
+
+    return newString;
+}
+
+function mirrorLookup(table){
+    const mTag = table.mirrorTag;
+    table[mTag] = {};
+    for (const cat in table.hh){
+        const cate = table.hh[cat];
+        table[mTag][cate] = {};
+        for (const tag in cate){
+            const rtag = cate[tag];
+            table[mTag][cate][rtag] = tag;
+        }
+    }
+     return table;
 }
 
 function dcFrm(string, json){

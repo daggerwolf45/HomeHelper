@@ -1,0 +1,14 @@
+{
+    "hh": {
+        "categories": {
+            "lt": "light",
+            "pw": "switch",
+            "tm": "climate"
+        }
+    },
+    "delimeters": {
+        "primary": ".",
+        "secondary": "_"
+    },
+    "mirrorTag": "ha"
+}

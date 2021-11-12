@@ -1,8 +1,10 @@
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
 module.exports = {
     name: 'whereiss',
     description: "Find the iss",
     execute(message, args){
-        const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+        
 
         const url = "https://api.wheretheiss.at/v1/satellites/25544";
 
