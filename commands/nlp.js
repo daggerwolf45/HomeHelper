@@ -6,7 +6,7 @@ const oLoc = './objects.json';
 const phraseFile = fs.readFileSync(pLoc);
 const objFile = fs.readFileSync(oLoc);
 let phrases = JSON.parse(phraseFile);
-let objects = createObjmap(JSON.parse(objFile));
+let objects = JSON.parse(objFile);
 
 const typesplit = phrases.grammer.separators.typesplit;
 const subtypesplit = phrases.grammer.separators.subtypesplit;
@@ -45,26 +45,21 @@ function getDeviceInfo(device){
 }
 
 function parseDevString(str){
-    const components = str.split(typesplit);
-    const parameterIDs = components[components.length-1].split(subtypesplit);
-    
-    components.pop();
-    components.push(parameterIDs.shift());
+    //Ref: sr_lt_sw_main.br
+    const reg = new RegExp(`\\${typesplit}|\\${subtypesplit}`, "g");
+    const components = str.split(/\_|\./g);
+
+    console.log(components);
     
     const devFid = str.split(subtypesplit).shift();
     console.log(devFid);
-
-    const params = fillParam(objects.devices.get(devFid), parameterIDs);
     
     const data = {
-        room: objects.rooms.get(components[0]),
-        category: objects.categories.get(components[1]),
-        type: objects.types.get(components[2]),
-        device: {
-            data: objects.devices.get(devFid),
-            parameters: params
-        },
-        parameters: objects.categories.get(objects.categories.get(components[1]).parameters)
+        room: objects.rooms[components[0]],
+        category: objects.categories[components[1]],
+        type: objects.classes[components[2]],
+        device: objects.devices[devFid],
+        parameter: objects.categories[components[1]].parameters[components[4]]
     }
 
     return data
@@ -81,41 +76,4 @@ function dcFrm(string, json){
     const codeHead = "\`\`\`json\n";
     const codeEnd = "\n\`\`\`";
     return codeHead.concat(string, codeEnd);
-}
-
-function createObjmap(obj){
-    const coll = {
-        rooms: new Map(),
-        categories: new Map(),
-        types: new Map(),
-        devices: new Map(),
-        people: new Map()
-    }
-
-    for (const i of obj.rooms){
-        coll.rooms.set(i.id, i);
-    }
-    for (const i of obj.categories){
-        if (i.parameters[0] != "none"){
-            let catParms = new Map();
-            for (const j of i.parameters){
-                catParms.set(j.id,j);
-            }
-
-            i.parameters = catParms;
-        }
-        coll.categories.set(i.id, i);
-        console.log(coll.categories.parameters);
-    }
-    for (const i of obj.classes){
-        coll.types.set(i.id, i);
-    }
-    for (const i of obj.devices){
-        coll.devices.set(i.fid, i);
-    }
-    for (const i of obj.people){
-        coll.people.set(i.name, i);
-    }
-
-    return coll;
 }
