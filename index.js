@@ -8,6 +8,7 @@ const fs = require('fs');
     Setup HomeAssistant
 */
 
+
 /*
     Setup Discord
 */
