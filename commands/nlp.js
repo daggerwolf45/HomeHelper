@@ -47,12 +47,9 @@ function getDeviceInfo(device){
 function parseDevString(str){
     //Ref: sr_lt_sw_main.br
     const reg = new RegExp(`\\${typesplit}|\\${subtypesplit}`, "g");
-    const components = str.split(/\_|\./g);
-
-    console.log(components);
+    const components = str.split(reg);
     
     const devFid = str.split(subtypesplit).shift();
-    console.log(devFid);
     
     const data = {
         room: objects.rooms[components[0]],
